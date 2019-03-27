@@ -1,6 +1,8 @@
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 import sys
+
 
 def simulation(file):
     x = []
@@ -11,15 +13,34 @@ def simulation(file):
             x.append(int(a))
             y.append(int(b))
 
-    colors = ['red']
-    plot = plt.figure()
+    fig, ax = plt.subplots()
 
-    x = np.array(x)
-    y = np.array(y)
 
-    plt.quiver(x[:-1], y[:-1], x[1:] - x[:-1], y[1:] - y[:-1], scale_units='xy', angles='xy', scale=1, color=colors[0])
+    xdata, ydata = [], []
+    ln, = plt.plot([], [], 'ro')
 
-    plt.show(plot)
+    frames = zip(x, y)
+    def init():
+        ax.set_xlim(0, 600)
+        ax.set_ylim(0, 600)
+        return ln,
+
+
+    def update(frame):
+        xdata.append(frame[0])
+        if len(xdata) > 20:
+            xdata.pop(0)
+        ydata.append(frame[1])
+        if len(ydata) > 20:
+            ydata.pop(0)
+        ln.set_data(xdata, ydata)
+        return ln,
+
+
+    ani = FuncAnimation(fig, update, frames=frames,
+                        init_func=init, blit=True, interval=10)
+    plt.show()
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
