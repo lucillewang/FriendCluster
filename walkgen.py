@@ -61,7 +61,7 @@ def simulation(dHeading, dStrength, delay, out_file):
             adjust((random.randint(1, dStrength)) + dHeading - (dStrength/2))
         else:
             adjust(random.randint(1, 360))
-        f.write(x,y)
+        f.write(str(x) + "," + str(y) + "\n")
         ticks += 1
     f.close()
 
