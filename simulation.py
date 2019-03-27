@@ -18,8 +18,6 @@ def simulation(files):
                 x.append(int(a))
                 y.append(int(b))
 
-    # print(allX)
-
     fig, ax = plt.subplots()
     ax.set_xlim(0, 600)
     ax.set_ylim(0, 600)
@@ -27,14 +25,25 @@ def simulation(files):
     lines = [plt.plot([], [], linewidth=3.0)[0] for i in range(len(allX))]
     xDatas = []
     yDatas = []
+    
     for i in range(len(allX)):
         xDatas.append([])
         yDatas.append([])
 
+    radius = 30
+    circle = plt.Circle((300, 300), radius, fill=False)
+
+    ax.add_artist(circle)
+
+    def get_centroid(x, y):
+        return (sum(x) / len(x), sum(y) / len(y))
+
     def init():
         for ln in lines:
             ln.set_data([], [])
-        return lines
+        shapes = lines.copy()
+        shapes.append(circle)
+        return shapes
 
     def update(frame):
         # print(frame)
@@ -48,7 +57,18 @@ def simulation(files):
             if len(ydata) > 20:
                 ydata.pop(0)
             lines[x].set_data(xdata, ydata)
-        return lines
+        
+        xPoints = []
+        yPoints = []
+        for x in allX:
+            xPoints.append(x[frame])
+            yPoints.append(y[frame])
+        center = get_centroid(xPoints, yPoints)
+        print(center)
+        circle.center = center
+        shapes = lines.copy()
+        shapes.append(circle)
+        return shapes
 
     ani = FuncAnimation(fig, update, frames=len(allX[0]),
                         init_func=init, blit=True, interval=10, repeat=False)
