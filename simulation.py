@@ -38,6 +38,9 @@ def simulation(files):
     def get_centroid(x, y):
         return (sum(x) / len(x), sum(y) / len(y))
 
+    def in_circle(cx, cy, r, zipped):
+        return [(z[0] - cx) ** 2 + (z[1] - cy) ** 2 < r ** 2 for z in zipped]
+
     def init():
         for ln in lines:
             ln.set_data([], [])
@@ -47,31 +50,37 @@ def simulation(files):
 
     def update(frame):
         # print(frame)
-        for x in range(len(xDatas)):
-            xdata = xDatas[x]
-            ydata = yDatas[x]
-            xdata.append(allX[x][frame])
+        for i in range(len(xDatas)):
+            xdata = xDatas[i]
+            ydata = yDatas[i]
+            xdata.append(allX[i][frame])
             if len(xdata) > 20:
                 xdata.pop(0)
-            ydata.append(allY[x][frame])
+            ydata.append(allY[i][frame])
             if len(ydata) > 20:
                 ydata.pop(0)
-            lines[x].set_data(xdata, ydata)
+            lines[i].set_data(xdata, ydata)
         
         xPoints = []
         yPoints = []
         for x in allX:
             xPoints.append(x[frame])
+        for y in allY:
             yPoints.append(y[frame])
         center = get_centroid(xPoints, yPoints)
-        print(center)
+        # print(center)
         circle.center = center
+        zipped = list(zip(xPoints, yPoints))
+        # print(zipped)
+        # print(circle.center)
+        contains = in_circle(center[0], center[1], radius, zipped)
+        print(contains)
         shapes = lines.copy()
         shapes.append(circle)
         return shapes
 
     ani = FuncAnimation(fig, update, frames=len(allX[0]),
-                        init_func=init, blit=True, interval=10, repeat=False)
+                        init_func=init, blit=True, interval=50, repeat=False)
     plt.show()
 
 
