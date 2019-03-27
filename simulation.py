@@ -24,8 +24,7 @@ def simulation(files):
     ax.set_xlim(0, 600)
     ax.set_ylim(0, 600)
 
-    colors = ['red', 'green', 'blue']
-    lines = [plt.plot([], [])[0] for _ in range(len(allX))]
+    lines = [plt.plot([], [], linewidth=3.0)[0] for i in range(len(allX))]
     xDatas = []
     yDatas = []
     for i in range(len(allX)):
