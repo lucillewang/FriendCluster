@@ -20,11 +20,11 @@ def simulation(file):
     ln, = plt.plot([], [], 'ro')
 
     frames = zip(x, y)
+    
     def init():
         ax.set_xlim(0, 600)
         ax.set_ylim(0, 600)
         return ln,
-
 
     def update(frame):
         xdata.append(frame[0])
