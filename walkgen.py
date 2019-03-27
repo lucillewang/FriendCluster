@@ -1,7 +1,7 @@
 """
 notes
-    500x500 grid
-    start within 15(?) radius circle (snap inwards) of 249,249
+    600x600 grid
+    start within 15(?) radius circle (snap inwards) of 299,299
     fixed sim length (how many cycles to get useful data?)
 
 params: file name, xDrift, yDrift, delay
@@ -46,7 +46,19 @@ def adjust(degree):
   else:
       x += 2
       y += 2
-      
+
+  if x > canvasDim:
+    x = canvasDim
+  elif x < 0:
+    x = 0
+  if y > canvasDim:
+    y = canvasDim
+  elif y < 0:
+    y = 0
+
+
+
+
 def simulation(dHeading, dStrength, delay, out_file):
     global canvasDim
     global simLen
