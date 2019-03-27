@@ -1,32 +1,64 @@
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 import sys
 
-def simulation(file):
-    x = []
-    y = []
-    with open(file) as f:
-        for pair in f:
-            (a, b) = pair.split(',')
-            x.append(int(a))
-            y.append(int(b))
 
-    colors = ['red']
-    plot = plt.figure()
+def simulation(files):
+    allX = []
+    allY = []
+    for trace in files:
+        with open(trace) as f:
+            x = []
+            y = []
+            allX.append(x)
+            allY.append(y)
+            for pair in f:
+                (a, b) = pair.split(',')
+                x.append(int(a))
+                y.append(int(b))
 
-    x = np.array(x)
-    y = np.array(y)
+    # print(allX)
 
-    plt.quiver(x[:-1], y[:-1], x[1:] - x[:-1], y[1:] - y[:-1], scale_units='xy', angles='xy', scale=1, color=colors[0])
+    fig, ax = plt.subplots()
+    ax.set_xlim(0, 600)
+    ax.set_ylim(0, 600)
 
-    # plt.xlim(0, 600)
-    # plt.ylim(0, 600)
+    colors = ['red', 'green', 'blue']
+    lines = [plt.plot([], [])[0] for _ in range(len(allX))]
+    xDatas = []
+    yDatas = []
+    for i in range(len(allX)):
+        xDatas.append([])
+        yDatas.append([])
 
-    plt.show(plot)
+    def init():
+        for ln in lines:
+            ln.set_data([], [])
+        return lines
+
+    def update(frame):
+        # print(frame)
+        for x in range(len(xDatas)):
+            xdata = xDatas[x]
+            ydata = yDatas[x]
+            xdata.append(allX[x][frame])
+            if len(xdata) > 20:
+                xdata.pop(0)
+            ydata.append(allY[x][frame])
+            if len(ydata) > 20:
+                ydata.pop(0)
+            lines[x].set_data(xdata, ydata)
+        return lines
+
+    ani = FuncAnimation(fig, update, frames=len(allX[0]),
+                        init_func=init, blit=True, interval=10, repeat=False)
+    plt.show()
+
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python3 simulate.py <trace_file>")
+    if len(sys.argv) < 2:
+        print("Usage: python3 simulate.py <trace_file1> <trace_file2>.....")
     else:
-        trace_file = sys.argv[1]
-        simulation(trace_file)
+        trace_files = sys.argv[1:]
+        simulation(trace_files)
