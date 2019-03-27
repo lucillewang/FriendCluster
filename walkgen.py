@@ -55,15 +55,14 @@ def simulation(dHeading, dStrength, delay, out_file):
     
     ticks = 0
     f = open(out_file, "w")
-
+  
     while (ticks < simLen):
-        if ticks > delay:
+        if ticks > delay and dStrength > 0:
             adjust((random.randint(1, dStrength)) + dHeading - (dStrength/2))
         else:
-            adjust(random.randint(0, 360))
+            adjust(random.randint(1, 360))
         f.write(str(x) + "," + str(y) + "\n")
         ticks += 1
-
     f.close()
 
 # out file name, x drift, y drift, delay
@@ -85,8 +84,6 @@ if __name__ == "__main__":
         simLen = 200
         x = 299
         y = 299
-
         print("Starting simulation with dHeading =", dHeading, "dStrength =", dStrength, "and delay =", delay)
         simulation(dHeading, dStrength, delay, out_file)
         print("Simulation complete! Results outputted in", out_file)
-  
