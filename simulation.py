@@ -19,6 +19,9 @@ def simulation(file):
 
     plt.quiver(x[:-1], y[:-1], x[1:] - x[:-1], y[1:] - y[:-1], scale_units='xy', angles='xy', scale=1, color=colors[0])
 
+    # plt.xlim(0, 600)
+    # plt.ylim(0, 600)
+
     plt.show(plot)
 
 if __name__ == "__main__":
