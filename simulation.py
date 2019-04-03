@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
-from scipy.misc import imread
+from imageio import imread
 import sys
 
 
@@ -38,6 +38,10 @@ def simulation(files):
 
     ax.add_artist(circle)
 
+    warning = plt.text(0.5, 0.5, '', fontsize=12)
+
+    ax.add_artist(warning)
+
     def get_centroid(x, y):
         return (sum(x) / len(x), sum(y) / len(y))
 
@@ -49,6 +53,7 @@ def simulation(files):
             ln.set_data([], [])
         shapes = lines.copy()
         shapes.append(circle)
+        shapes.append(warning)
         return shapes
 
     def update(frame):
@@ -78,8 +83,16 @@ def simulation(files):
         # print(circle.center)
         contains = in_circle(center[0], center[1], radius, zipped)
         print(contains)
+        
+        s = ''
+        for i in range(len(contains)):
+            if not contains[i]:
+                s += colors[i] + " is too far away!\n"
+        warning.set_text(s)
+
         shapes = lines.copy()
         shapes.append(circle)
+        shapes.append(warning)
         return shapes
 
     ani = FuncAnimation(fig, update, frames=len(allX[0]),
