@@ -38,7 +38,7 @@ def simulation(files):
 
     ax.add_artist(circle)
 
-    warning = plt.text(0.5, 0.5, '', fontsize=12)
+    warning = plt.text(10, 0.5, '', fontsize=12)
 
     ax.add_artist(warning)
 
@@ -82,12 +82,15 @@ def simulation(files):
         # print(zipped)
         # print(circle.center)
         contains = in_circle(center[0], center[1], radius, zipped)
-        print(contains)
+        # print(contains)
         
         s = ''
         for i in range(len(contains)):
             if not contains[i]:
                 s += colors[i] + " is too far away!\n"
+                circle.set_color("red")
+        if s == '':
+            circle.set_color("black")
         warning.set_text(s)
 
         shapes = lines.copy()
@@ -96,7 +99,7 @@ def simulation(files):
         return shapes
 
     ani = FuncAnimation(fig, update, frames=len(allX[0]),
-                        init_func=init, blit=True, interval=50, repeat=False)
+                        init_func=init, blit=True, interval=50, repeat=True)
 
     fig.set_size_inches(7, 7)
     # plt.axis('off')
