@@ -30,7 +30,7 @@ def simulation(files):
         xDatas.append([])
         yDatas.append([])
 
-    radius = 30
+    radius = 60
     circle = plt.Circle((300, 300), radius, fill=False)
 
     ax.add_artist(circle)
