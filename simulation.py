@@ -81,6 +81,8 @@ def simulation(files):
 
     ani = FuncAnimation(fig, update, frames=len(allX[0]),
                         init_func=init, blit=True, interval=50, repeat=False)
+
+    fig.set_size_inches(7, 7)
     plt.show()
 
 
