@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+from scipy.misc import imread
 import sys
 
 
@@ -22,7 +23,9 @@ def simulation(files):
     ax.set_xlim(0, 600)
     ax.set_ylim(0, 600)
 
-    lines = [plt.plot([], [], linewidth=3.0)[0] for i in range(len(allX))]
+    colors = ['red', 'blue', 'yellow', 'orange', 'white', 'cyan', 'magenta']
+
+    lines = [plt.plot([], [], linewidth=3.0, color=colors[i])[0] for i in range(len(allX))]
     xDatas = []
     yDatas = []
     
@@ -83,6 +86,13 @@ def simulation(files):
                         init_func=init, blit=True, interval=50, repeat=False)
 
     fig.set_size_inches(7, 7)
+    # plt.axis('off')
+
+    green = imread('tech_green.jpg')
+    plt.imshow(green, extent=[0.5, 599.5, -0.5, 599.5])
+    # ax.set_facecolor('green')
+    ax.set_xticks([])
+    ax.set_yticks([])
     plt.show()
 
 
