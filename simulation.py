@@ -5,7 +5,7 @@ from imageio import imread
 import sys
 
 
-def simulation(files):
+def simulation(files, fixed_center):
     allX = []
     allY = []
     for trace in files:
@@ -75,7 +75,10 @@ def simulation(files):
             xPoints.append(x[frame])
         for y in allY:
             yPoints.append(y[frame])
-        center = get_centroid(xPoints, yPoints)
+        if fixed_center:
+            center = fixed_center
+        else:
+            center = get_centroid(xPoints, yPoints)
         # print(center)
         circle.center = center
         zipped = list(zip(xPoints, yPoints))
@@ -114,7 +117,13 @@ def simulation(files):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python3 simulate.py <trace_file1> <trace_file2>.....")
+        print("Usage: python3 simulate.py (f center_x center_y) or (d) <trace_file1> <trace_file2>.....")
     else:
-        trace_files = sys.argv[1:]
-        simulation(trace_files)
+        fixed = sys.argv[1] == 'f'
+        center = None
+        if fixed:
+            center = (int(sys.argv[2]), int(sys.argv[3]))
+            trace_files = sys.argv[4:]
+        else:
+            trace_files = sys.argv[2:]
+        simulation(trace_files, center)
