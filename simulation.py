@@ -61,6 +61,9 @@ def simulation(files, fixed_center):
         for i in range(len(xDatas)):
             xdata = xDatas[i]
             ydata = yDatas[i]
+            if frame == 0:
+                xdata.clear()
+                ydata.clear()
             xdata.append(allX[i][frame])
             if len(xdata) > 20:
                 xdata.pop(0)
